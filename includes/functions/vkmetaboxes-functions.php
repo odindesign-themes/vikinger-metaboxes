@@ -1,6 +1,6 @@
 <?php
 /**
- * Vikinger Metaboxes
+ * Vikinger Metaboxes Functions
  * 
  * @since 1.0.0
  */
@@ -8,13 +8,13 @@
 /**
  * Add custom metaboxes
  */
-function vikinger_custom_meta_boxes() {
+function vkmetaboxes_custom_meta_boxes() {
   add_meta_box('vikinger_meta_video', _x('Vikinger - Video', '(Backend) Video Meta Box - Title', 'vikinger'), 'vikinger_meta_video_fn', 'post', 'normal', 'high');
   add_meta_box('vikinger_meta_audio', _x('Vikinger - Audio', '(Backend) Audio Meta Box - Title', 'vikinger'), 'vikinger_meta_audio_fn', 'post', 'normal', 'high');
   add_meta_box('vikinger_meta_gallery', _x('Vikinger - Gallery', '(Backend) Gallery Meta Box - Title', 'vikinger'), 'vikinger_meta_gallery_fn', 'post', 'normal', 'high');
 }
 
-add_action('add_meta_boxes', 'vikinger_custom_meta_boxes');
+add_action('add_meta_boxes', 'vkmetaboxes_custom_meta_boxes');
 
 /**
  * Video Metabox
@@ -86,7 +86,7 @@ function vikinger_meta_gallery_fn($post) {
 /**
  * Custom metaboxes saving
  */
-function vikinger_custom_meta_save($post_ID) {
+function vkmetaboxes_custom_meta_save($post_ID) {
   $postFormat = get_post_format($post_ID);
   $isAutosave = wp_is_post_autosave($post_ID);
   $isRevision = wp_is_post_revision($post_ID);
@@ -113,25 +113,44 @@ function vikinger_custom_meta_save($post_ID) {
   }
 }
 
-add_action('save_post', 'vikinger_custom_meta_save');
+add_action('save_post', 'vkmetaboxes_custom_meta_save');
 
 /**
  * Add admin script to control display of custom meta boxes according to post format
  */
-function vikinger_metabox_condition_postformat($hook) {
+function vkmetaboxes_metabox_condition_postformat($hook) {
   if (($hook !== 'post.php') && ($hook !== 'post-new.php')) {
     return;
   }
 
-  wp_enqueue_script('vikinger_postformat_metaboxes', VIKINGER_URL . '/js/post-format.bundle.min.js', array(), '1.0.0', true);
+  wp_enqueue_script('vikinger_postformat_metaboxes', VKMETABOXES_URL . 'js/post-format.bundle.min.js', array(), '1.0.0', true);
   
   // pass php variables to javascript file
   wp_localize_script('vikinger_postformat_metaboxes', 'WP_CONSTANTS', array(
-    'VIKINGER_URL'    => VIKINGER_URL,
-    'AJAX_URL'        => admin_url('admin-ajax.php')
+    'AJAX_URL'  => admin_url('admin-ajax.php')
   ));
 }
 
-add_action('admin_enqueue_scripts', 'vikinger_metabox_condition_postformat');
+add_action('admin_enqueue_scripts', 'vkmetaboxes_metabox_condition_postformat');
+
+/**
+ * Get attachments by ids
+ */
+function vkmetaboxes_get_attachments($attachments) {
+  $attachment_ids = explode(',', $attachments);
+
+  $attachments = [];
+
+  foreach ($attachment_ids as $attachment_id) {
+    $attachment = [
+      'id'  => $attachment_id,
+      'url' => wp_get_attachment_url($attachment_id)
+    ];
+
+    $attachments[] = $attachment;
+  }
+
+  return $attachments;
+}
 
 ?>
