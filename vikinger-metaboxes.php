@@ -3,7 +3,7 @@
  * Plugin Name: Vikinger Metaboxes
  * Plugin URI: http://odindesign-themes.com/
  * Description: Post format metaboxes for the vikinger theme.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Odin Design Themes
  * Author URI: https://themeforest.net/user/odin_design
  * License: https://themeforest.net/licenses/
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 /**
  * Versioning
  */
-define('VKMETABOXES_VERSION', '1.0.1');
+define('VKMETABOXES_VERSION', '1.0.2');
 define('VKMETABOXES_VERSION_OPTION', 'vkmetaboxes_version');
 
 /**
